@@ -1,0 +1,13 @@
+{
+  "name": "reports-api",
+  "profile": "andreas",
+  "regions": ["eu-west-1"],
+  "hooks": {
+    "build": "yarn build"
+  },
+  "stages": {
+    "production": {
+      "domain": "reports-api.andreas.enterprises"
+    }
+  }
+}
