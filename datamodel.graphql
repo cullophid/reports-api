@@ -1,0 +1,19 @@
+type Report {
+  id: ID! @unique
+  title: String!
+  slides: [Slide!]!
+}
+
+type Slide {
+  id: ID! @unique
+  template: SlideTemplate!
+  title: String!
+  subtitle: String
+  primaryText: String
+  secondaryText: String
+}
+
+enum SlideTemplate {
+  TitleSlide
+  TwoColumn
+}
