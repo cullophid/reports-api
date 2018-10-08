@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongo_1 = require("./mongo");
+const mongo_1 = require("../mongo");
 const run = mongo_1.collection("reports");
 exports.Report = {};
-exports.fetchReports = () => __awaiter(this, void 0, void 0, function* () {
-    let res = yield run((reports) => reports.find({}).toArray());
-    console.log(res);
-    return res;
-});
+exports.fetchReports = () => run((reports) => reports.find({}).toArray());
+exports.fetchReport = (_id) => run((reports) => reports.findOne({ _id }));
 exports.createReport = (title) => __awaiter(this, void 0, void 0, function* () {
     const report = {
         title,
@@ -33,11 +30,10 @@ exports.createReport = (title) => __awaiter(this, void 0, void 0, function* () {
     return Object.assign({}, report, { _id: res.insertedId });
 });
 exports.deleteReport = (_id) => __awaiter(this, void 0, void 0, function* () {
-    let res = yield run((reports) => reports.deleteOne({ _id }));
-    console.log(res);
+    yield run((reports) => reports.deleteOne({ _id }));
     return _id;
 });
 exports.updateReport = (report) => __awaiter(this, void 0, void 0, function* () {
-    let res = yield run((reports) => reports.updateOne({ _id: report._id }, { $set: report }));
+    yield run((reports) => reports.updateOne({ _id: report._id }, { $set: report }));
     return report;
 });

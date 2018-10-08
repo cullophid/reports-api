@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongo_1 = require("./mongo");
+const mongo_1 = require("../mongo");
 const run = mongo_1.collection("reports");
 exports.Report = {};
 exports.fetchReports = () => __awaiter(this, void 0, void 0, function* () {

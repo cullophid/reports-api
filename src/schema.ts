@@ -1,18 +1,22 @@
 import { gql } from "apollo-server-express";
+import { ObjectIdScalar } from "./scalars";
+import { EmailScalar } from "./scalars";
 import {
   Report,
   fetchReports,
   createReport,
   deleteReport,
-  updateReport
-} from "./reports";
+  updateReport,
+  fetchReport
+} from "./data/reports";
 export const typeDefs = gql`
+  scalar Email
+  scalar ObjectID
   enum SlideTemplate {
     TitleSlide
     TwoColumn
   }
   type Slide {
-    id: Int!
     template: SlideTemplate!
     title: String!
     subtitle: String!
@@ -20,7 +24,6 @@ export const typeDefs = gql`
     secondaryText: String!
   }
   input SlideUpdate {
-    id: Int!
     template: SlideTemplate!
     title: String!
     subtitle: String!
@@ -28,37 +31,38 @@ export const typeDefs = gql`
     secondaryText: String!
   }
   type Report {
-    id: Int!
+    _id: ObjectID!
     title: String!
     slides: [Slide!]!
   }
 
   input ReportUpdate {
-    id: Int!
+    _id: ObjectID!
     title: String!
     slides: [SlideUpdate!]!
   }
   type Query {
     reports: [Report!]!
+    report(_id: ObjectID!): Report!
   }
   type Mutation {
-    createReport(title: String): Report
-    updateReport(report: ReportUpdate!): Report
-    deleteReport(id: ID!): ID!
+    createReport(title: String): Report!
+    updateReport(report: ReportUpdate!): Report!
+    deleteReport(_id: ObjectID!): ObjectID!
   }
 `;
+
 export const resolvers = {
+  ObjectID: ObjectIdScalar,
+  Email: EmailScalar,
   Report,
   Query: {
-    reports: () => fetchReports()
+    reports: () => fetchReports(),
+    report: (_: any, { _id }: any) => fetchReport(_id)
   },
   Mutation: {
     createReport: (_: any, { title }: any) => createReport(title || "Untitled"),
-    deleteReport: (_: any, { id }: any) => deleteReport(id),
-    updateReport: async (_: any, { report }: any) => {
-      let res = await updateReport(report);
-      console.log(res);
-      return res;
-    }
+    deleteReport: (_: any, { _id }: any) => deleteReport(_id),
+    updateReport: (_: any, { report }: any) => updateReport(report)
   }
 };
